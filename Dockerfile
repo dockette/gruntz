@@ -12,9 +12,9 @@ RUN apt-get update && \
 	apt-get remove -y wget && \
 	rm -rf /var/lib/apt/lists/* /var/lib/log/*
 
-USER xclient
-
-ADD ./entrypoint.sh /entrypoint.sh
+ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
+USER xclient
 
 ENTRYPOINT /entrypoint.sh
