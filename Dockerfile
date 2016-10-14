@@ -5,7 +5,7 @@ MAINTAINER Milan Felix Sulc <sulcmil@gmail.com>
 RUN apt-get update && \
 	apt-get dist-upgrade -y && \
 	apt-get install -y wget tar && \
-	wget https://github.com/whaleapps/gruntz/releases/download/1.0/gruntz.tgz && \
+	wget https://github.com/whaleapps/gruntz/releases/download/v1.0/gruntz.tgz && \
 	mkdir /srv/gruntz && \
 	tar -xvf gruntz.tgz -C /srv/gruntz && \
 	apt-get remove -y wget tar && \
