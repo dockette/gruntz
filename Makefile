@@ -9,7 +9,7 @@ build:
 .PHONY: test
 test:
 	docker run --rm --entrypoint sh ${DOCKER_IMAGE}:${DOCKER_TAG} -lc 'wine --version'
-	docker run --rm --entrypoint sh ${DOCKER_IMAGE}:${DOCKER_TAG} -lc 'test -f /srv/gruntz/GRUNTZ.exe'
+	docker run --rm --entrypoint sh ${DOCKER_IMAGE}:${DOCKER_TAG} -lc 'test -f /srv/gruntz/GRUNTZ.EXE'
 
 .PHONY: run
 run:
