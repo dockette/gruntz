@@ -15,6 +15,7 @@
 - `make build` builds `dockette/gruntz:${DOCKER_TAG}` for `${DOCKER_PLATFORMS}`.
 - `make test` runs smoke checks against the built image.
 - `make run` starts the GUI container with X11 and sound mounts for local/manual testing.
+- `make version` prints `VERSION`; `make release` sets it to today's date. CI pushes `latest` also as `<VERSION>` and creates the GitHub release.
 
 ## CI
 

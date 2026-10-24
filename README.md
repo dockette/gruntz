@@ -43,12 +43,19 @@ xhost +x
 
 Gruntz works only at resolution 640x480.
 
+## Versions
+
+The release version is the date in [`VERSION`](VERSION). CI pushes `latest` also as `dockette/gruntz:<VERSION>`.
+To release, run `make release`, commit and push to `master`.
+
 ## Development
 
 ```bash
 make build
 make test
 make run
+make version
+make release
 ```
 
 The `test` target is intentionally limited to non-interactive smoke checks. It verifies Wine is available in the image and that the bundled Gruntz executable exists without trying to start the GUI game.
