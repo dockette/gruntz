@@ -1,6 +1,7 @@
 DOCKER_IMAGE=dockette/gruntz
 DOCKER_TAG?=latest
 DOCKER_PLATFORMS?=linux/amd64
+include VERSION
 
 .PHONY: build
 build:
@@ -14,3 +15,12 @@ test:
 .PHONY: run
 run:
 	docker run --rm -it -v /tmp/.X11-unix:/tmp/.X11-unix:ro -e DISPLAY=$$DISPLAY --device /dev/snd -v /dev/shm:/dev/shm ${DOCKER_IMAGE}:${DOCKER_TAG}
+
+.PHONY: version
+version:
+	@echo ${VERSION}
+
+.PHONY: release
+release:
+	@sed -i.bak "s/^VERSION=.*/VERSION=$$(date -u +%Y.%m.%d)/" VERSION && rm VERSION.bak
+	@cat VERSION

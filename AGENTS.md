@@ -15,7 +15,8 @@
 - `make build` builds `dockette/gruntz:${DOCKER_TAG}` for `${DOCKER_PLATFORMS}`.
 - `make test` runs smoke checks against the built image.
 - `make run` starts the GUI container with X11 and sound mounts for local/manual testing.
+- `make version` prints `VERSION`; `make release` sets it to today's date. CI pushes `latest` also as `<VERSION>` and creates the GitHub release.
 
 ## CI
 
-The Docker workflow has Test, Build, and Docs jobs. The default build platform is `linux/amd64` because the image depends on Wine and a legacy GUI runtime.
+The Docker workflow has Test, Build, Release, and Docs jobs. Build is one job that pushes all tags on `master` only. The default build platform is `linux/amd64` because the image depends on Wine and a legacy GUI runtime.
