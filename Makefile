@@ -1,7 +1,7 @@
 DOCKER_IMAGE=dockette/gruntz
 DOCKER_TAG?=latest
 DOCKER_PLATFORMS?=linux/amd64
-VERSION:=$(shell cat VERSION)
+include VERSION
 
 .PHONY: build
 build:
@@ -22,6 +22,5 @@ version:
 
 .PHONY: release
 release:
-	@date -u +%Y.%m.%d > VERSION
-	@echo "VERSION: ${VERSION} -> $$(cat VERSION)"
-	@echo "next: git commit -am \"Release: $$(cat VERSION)\" && git push"
+	@sed -i.bak "s/^VERSION=.*/VERSION=$$(date -u +%Y.%m.%d)/" VERSION && rm VERSION.bak
+	@cat VERSION

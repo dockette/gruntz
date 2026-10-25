@@ -14,15 +14,25 @@
 
 -----
 
-## Status
-
-This image is maintained as a legacy GUI/game image. Runtime needs an X11 display, sound device, and manual interaction, so CI validates only the Docker build and packaged binary presence. The Docker Hub badge may be less representative than for headless images because this image is GUI-only and practical usage is local/interactive.
-
 ![Gruntz in Docker container](https://raw.githubusercontent.com/whaleapps/gruntz/master/docs/gruntz.png)
+
+This image is a legacy GUI game image. The game needs an X11 display, a sound device and manual interaction, so CI
+checks only the Docker build and that the game binary exists. The Docker Hub pull badge is less representative than for
+headless images, because the image is mostly used locally.
+
+## Features
+
+- Gruntz `v1.0` from [whaleapps/gruntz](https://github.com/whaleapps/gruntz/releases) in `/srv/gruntz`, run through Wine
+  (`suchja/wine` base image)
+- `linux/amd64` only: the image depends on Wine and a legacy GUI runtime
+- Gruntz works only at resolution 640x480
 
 ## Usage
 
-```bash
+```sh
+# Allow the container to use your X server
+xhost +x
+
 docker run \
   --rm \
   -it \
@@ -33,33 +43,26 @@ docker run \
   dockette/gruntz:latest
 ```
 
-Don't forget to allow xhost.
-
-```bash
-xhost +x
-```
-
-## Troubleshooting
-
-Gruntz works only at resolution 640x480.
-
 ## Versions
 
-The release version is the date in [`VERSION`](VERSION). CI pushes `latest` also as `dockette/gruntz:<VERSION>`.
-To release, run `make release`, commit and push to `master`.
+| Version | Release |
+|---------|---------|
+| `dockette/gruntz:YYYY.MM.DD` | release `YYYY.MM.DD` |
+| `dockette/gruntz:latest` | latest build of `master` |
+
+Releases are listed on [GitHub](https://github.com/dockette/gruntz/releases).
 
 ## Development
 
-```bash
-make build
-make test
-make run
-make version
-make release
+```sh
+make build          # build the image
+make test           # check that Wine runs and GRUNTZ.EXE exists, without starting the game
+make run            # start the game with X11 and sound mounts
+make version        # print VERSION
+make release        # set today's date in VERSION
 ```
-
-The `test` target is intentionally limited to non-interactive smoke checks. It verifies Wine is available in the image and that the bundled Gruntz executable exists without trying to start the GUI game.
 
 ## Maintenance
 
-See [how to contribute](https://github.com/dockette/.github/blob/master/CONTRIBUTING.md) to this package. Consider to [support](https://github.com/sponsors/f3l1x) **f3l1x**. Thank you for using this package.
+See [how to contribute](https://github.com/dockette/.github/blob/master/CONTRIBUTING.md) to this package. Consider to
+[support](https://github.com/sponsors/f3l1x) **f3l1x**. Thank you for using this package.

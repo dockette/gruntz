@@ -34,32 +34,42 @@ jobs:
       - name: "Test image"
         run: "make test"
 
-  version:
-    name: "Version"
+  build:
+    name: "Build"
+    needs: test
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.version.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
       - name: Read VERSION
         id: version
-        run: echo "version=$(cat VERSION)" >> "$GITHUB_OUTPUT"
+        run: cat VERSION >> "$GITHUB_OUTPUT"
 
-  build:
-    name: "Build"
-    needs: ["test", "version"]
-    uses: dockette/.github/.github/workflows/docker.yml@master
-    strategy:
-      fail-fast: false
-      matrix:
-        tag: ["latest", "${{ needs.version.outputs.version }}"]
-    secrets: inherit
-    with:
-      image: "dockette/gruntz"
-      tag: "${{ matrix.tag }}"
-      platforms: "linux/amd64"
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Login to DockerHub
+        if: github.ref == 'refs/heads/master'
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/amd64
+          push: ${{ github.ref == 'refs/heads/master' }}
+          tags: |
+            dockette/gruntz:latest
+            dockette/gruntz:${{ steps.version.outputs.VERSION }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   release:
     name: "Release"
@@ -75,7 +85,9 @@ jobs:
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release view "$(cat VERSION)" || gh release create "$(cat VERSION)" --generate-notes
+        run: |
+          . ./VERSION
+          gh release view "$VERSION" || gh release create "$VERSION" --generate-notes
 
   docs:
     name: "Docs"
